@@ -5,7 +5,7 @@
 
 #include "include/shader.h"
 
-uint32_t createShader(char* filepath, GLenum type) {
+uint32_t create_shader(char* filepath, GLenum type) {
 	long size;
 	char source[1000];
 	FILE* file;
@@ -43,7 +43,7 @@ uint32_t createShader(char* filepath, GLenum type) {
 	return shader;
 }
 
-uint32_t createShaderProgram(uint32_t vertexShader, uint32_t fragmentShader)
+uint32_t create_shader_program(uint32_t vertexShader, uint32_t fragmentShader)
 {
 	uint32_t program;
 	int success;

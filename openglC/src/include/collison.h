@@ -29,4 +29,4 @@ ex: 0--1
     3--2
 */
 
-bool isColliding(point* polygon1, int size1, point* polygon2, int size2, vec2* translationVector);
+bool isColliding(point* polygon1, int size1, vec2 center1, point* polygon2, int size2, vec2 center2, vec2* translationVector);

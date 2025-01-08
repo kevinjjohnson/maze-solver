@@ -11,11 +11,12 @@ float intervalDistance(float minA, float maxA, float minB, float maxB) {
 
 void projectPolygon(vec2 axis, point* points, int size, float* min, float* max) {
 	if (size <= 0) {
-		assert("FUCK YOU");
+		//assert("FUCK YOU");
+		size = 1;
 	}
 	float dp;
 	dp = glm_vec2_dot(axis, (vec2){points[0].x, points[0].y});
-	printf("\ndot product is: %f\n", dp);
+	//printf("\ndot product is: %f\n", dp);
 	*min = dp;
 	*max = dp;
 	int i;
@@ -28,9 +29,10 @@ void projectPolygon(vec2 axis, point* points, int size, float* min, float* max) 
 	}
 }
 
-bool isColliding(point* polygon1, int size1, point* polygon2, int size2, vec2* translationVector) {
+bool isColliding(point* polygon1, int size1, vec2 center1, point* polygon2, int size2, vec2 center2, vec2* translationVector) {
 	if (size1 <= 1 || size2 <= 1)
-		assert("kill yourself one of those is a point");
+		//assert("kill yourself one of those is a point");
+		size1 = .5;
 	float minInterval = FLT_MAX;
 	int i;
 	point p1, p2;
@@ -74,6 +76,12 @@ bool isColliding(point* polygon1, int size1, point* polygon2, int size2, vec2* t
 			minInterval = dist;
 			finalAxis[0] = axis[0];
 			finalAxis[1] = axis[1];
+			vec2 d;
+			glm_vec2_sub(center1, center2, d);
+			if (glm_vec2_dot(d, finalAxis) < 0) {
+				glm_vec2_scale(finalAxis, -1.0f, finalAxis);
+				printf("axis inverted");
+			}
 		}
 	}
 	printf("TRANSLATION AXIS: (%f, %f)\n", finalAxis[0], finalAxis[1]);

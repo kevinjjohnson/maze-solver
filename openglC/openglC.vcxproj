@@ -19,8 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\batch_renderer.c" />
     <ClCompile Include="src\collision.c" />
     <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\quad.c" />
     <ClCompile Include="src\shader.c" />
     <ClCompile Include="src\texture.c" />
     <ClCompile Include="src\vendor\stb_image\stb_image.c" />
@@ -52,7 +54,9 @@
     <ClInclude Include="dependencies\GLEW\include\GL\wglew.h" />
     <ClInclude Include="dependencies\GLFW\include\GLFW\glfw3.h" />
     <ClInclude Include="dependencies\GLFW\include\GLFW\glfw3native.h" />
+    <ClInclude Include="src\include\batch_renderer.h" />
     <ClInclude Include="src\include\collison.h" />
+    <ClInclude Include="src\include\quad.h" />
     <ClInclude Include="src\include\shader.h" />
     <ClInclude Include="src\include\texture.h" />
     <ClInclude Include="src\vendor\stb_image\stb_image.h" />
@@ -60,6 +64,7 @@
   <ItemGroup>
     <Image Include="resources\textures\bruno.png" />
     <Image Include="resources\textures\concrete.png" />
+    <Image Include="resources\textures\home.png" />
     <Image Include="resources\textures\test.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

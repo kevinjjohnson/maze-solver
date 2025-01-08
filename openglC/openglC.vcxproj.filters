@@ -30,6 +30,12 @@
     <ClCompile Include="src\collision.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\quad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\batch_renderer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="dependencies\GLEW\doc\advanced.html" />
@@ -82,6 +88,12 @@
     <ClInclude Include="src\include\collison.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\include\quad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\batch_renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\bruno.png">
@@ -91,6 +103,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="resources\textures\test.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\home.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

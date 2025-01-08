@@ -1,10 +1,11 @@
 #include "include/texture.h"
 #include "vendor/stb_image/stb_image.h"
 
-uint32_t loadTexture(char* path, GLenum type) {
+uint32_t load_texture(char* path, GLenum type, uint32_t slot) {
     uint32_t texture;
-    int32_t width, height, nrChannels;
+    int32_t width, height, num_channels;
     glGenTextures(1, &texture);
+    glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, texture);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -14,8 +15,9 @@ uint32_t loadTexture(char* path, GLenum type) {
 
     unsigned char* data;
     stbi_set_flip_vertically_on_load(1);
-    data = stbi_load(path, &width, &height, &nrChannels, 0);
+    data = stbi_load(path, &width, &height, &num_channels, 0);
     if (data) {
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
