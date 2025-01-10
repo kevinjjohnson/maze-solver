@@ -6,7 +6,6 @@
 
 #include "include/shader.h"
 #include "include/texture.h"
-#include "include/collison.h"
 #include "include/batch_renderer.h"
 #include "include/quad.h"
 #include "include/camera.h"
@@ -18,14 +17,6 @@ typedef struct {
 } Settings;
 
 
-void processInput(GLFWwindow* window);
-
-void movePoints(point* points, int size, vec2 amt) {
-    for (int i = 0; i < size; i++) {
-        points[i].x += amt[0];
-        points[i].y += amt[1];
-    }
-}
 
 int main(void) {
     GLFWwindow* window; 
@@ -69,43 +60,6 @@ int main(void) {
 
     uint32_t projection = glGetUniformLocation(shaderProgram, "projection");
     glUniformMatrix4fv(projection, 1, GL_FALSE, (float*)cam.view_projection_matrix);
-
-    vec2 testAxis = { 0.0f, 1.0f };
-
-    //first box(static one, test tex)
-    point polygon1[4];
-    polygon1[0].x = 750;
-    polygon1[0].y = 400;
-    polygon1[1].x = 850;
-    polygon1[1].y = 400;
-    polygon1[2].x = 850;
-    polygon1[2].y = 500;
-    polygon1[3].x = 750;
-    polygon1[3].y = 500;
-    vec2 center1 = { 800, 450 };
-
-    //second box(moving, bruno)
-    point polygon2[4];
-    polygon2[0].x = 50;
-    polygon2[0].y = 50;
-    polygon2[1].x = 150;
-    polygon2[1].y = 50;
-    polygon2[2].x = 150;
-    polygon2[2].y = 150;
-    polygon2[3].x = 50;
-    polygon2[3].y = 150;
-    vec2 center2 = { 100, 100 };
-
-    vec2 translationVec;
-    bool collided = isColliding(polygon1, 4, center1, polygon2, 4, center2, &translationVec);
-    if (collided) {
-        printf("polygons collided\n translation vector is: (%f, %f)\n", translationVec[0], translationVec[1]);
-    }
-    else {
-        printf("polygons didnt collide\n");
-    }
-
-
 
     uint32_t texture1, texture2;
     texture1 = load_texture("resources/textures/home.png", GL_TEXTURE_2D, 0);
@@ -154,16 +108,6 @@ int main(void) {
             zoom_camera(&cam, cam.zoom - .01);
         }
         
-
-        /*
-        printf("bottom left of collider: (%f, %f)\n", polygon2[0].x, polygon2[0].y);
-        if (isColliding(polygon2, 4, location2, polygon1, 4, center1, &translationVec)) {
-            printf("polygons collided, translation vector is: (%f, %f)\n", translationVec[0], translationVec[1]);
-            location2[0] += translationVec[0];
-            location2[1] += translationVec[1];
-            movePoints(polygon2, 4, translationVec);
-        }
-        */
 
         glUseProgram(shaderProgram);
         glActiveTexture(GL_TEXTURE0);
