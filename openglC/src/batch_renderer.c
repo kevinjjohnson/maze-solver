@@ -30,7 +30,8 @@ float testverts[] = {
 void init_batch_renderer(batch_renderer* renderer) {
 	printf("test");
 	renderer->num_quads = 0;
-	
+	renderer->num_draw_calls = 0;
+
 	glGenVertexArrays(1, &(renderer->va));
 	glBindVertexArray(renderer->va);
 
@@ -82,9 +83,14 @@ void draw_batch(batch_renderer* renderer){
 
 	glBindVertexArray(renderer->va);
 	glDrawElements(GL_TRIANGLES, renderer->num_quads * 6, GL_UNSIGNED_INT, 0);
+	renderer->num_draw_calls++;
 }
 
 void add_quad(batch_renderer* renderer, quad q) {
+	if (renderer->num_quads >= MAX_QUAD_COUNT) {
+		draw_batch(renderer);
+		flush_renderer(renderer);
+	}
 	/*
 	* 3--2
 	* |  |
@@ -109,4 +115,9 @@ void add_quad(batch_renderer* renderer, quad q) {
 	memcpy(renderer->buffer_current, verts, sizeof(verts));
 	renderer->buffer_current += 4;
 	renderer->num_quads++;
+}
+
+void flush_renderer(batch_renderer* renderer){
+	renderer->num_quads = 0;
+	renderer->buffer_current = renderer->buffer_start;
 }

@@ -9,6 +9,8 @@
 #include "include/collison.h"
 #include "include/batch_renderer.h"
 #include "include/quad.h"
+#include "include/camera.h"
+
 
 typedef struct {
     int size[2];
@@ -25,8 +27,7 @@ void movePoints(point* points, int size, vec2 amt) {
     }
 }
 
-int main(void)
-{
+int main(void) {
     GLFWwindow* window; 
     Settings s;
     s.name = "i hate bug\0";
@@ -58,11 +59,16 @@ int main(void)
     shaderProgram = create_shader_program(vertexShader, fragmentShader);
 
 
-    mat4 ortho;
-    glm_ortho(0.0f, 1600.0f, 0.0f, 900.0f, -1.0f, 1.0f, ortho);
+    //mat4 ortho;
+    //glm_ortho(0.0f, 1600.0f, 0.0f, 900.0f, -1.0f, 1.0f, ortho);
+
+    camera cam;
+    init_camera(&cam);
+
+
 
     uint32_t projection = glGetUniformLocation(shaderProgram, "projection");
-    glUniformMatrix4fv(projection, 1, GL_FALSE, (float*)ortho);
+    glUniformMatrix4fv(projection, 1, GL_FALSE, (float*)cam.view_projection_matrix);
 
     vec2 testAxis = { 0.0f, 1.0f };
 
@@ -90,10 +96,6 @@ int main(void)
     polygon2[3].y = 150;
     vec2 center2 = { 100, 100 };
 
-    //float min, max;
-    //projectPolygon(testAxis, &points, 4, &min, &max);
-    //printf("min is: %f\n", min);
-    //printf("max is: %f\n", max);
     vec2 translationVec;
     bool collided = isColliding(polygon1, 4, center1, polygon2, 4, center2, &translationVec);
     if (collided) {
@@ -131,26 +133,27 @@ int main(void)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        renderer.num_draw_calls = 0;
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
-        /*
+        
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            location2[1] += 2;
-            movePoints(polygon2, 4, (vec2) { 0.0f, 2.0f });
+            move_camera(&cam, (vec2) {0.0f, 2.0f});
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            location2[1] -= 2;
-            movePoints(polygon2, 4, (vec2) { 0.0f, -2.0f });
+            move_camera(&cam, (vec2) { 0.0f, -2.0f });
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            location2[0] -= 2;
-            movePoints(polygon2, 4, (vec2) { -2.0f, 0.0f });
+            move_camera(&cam, (vec2) { -2.0f, 0.0f });
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            location2[0] += 2;
-            movePoints(polygon2, 4, (vec2) { 2.0f, 0.0f });
+            move_camera(&cam, (vec2) { 2.0f, 0.0f });
         }
-        */
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+            printf("should be zoomin");
+            zoom_camera(&cam, cam.zoom - .01);
+        }
+        
 
         /*
         printf("bottom left of collider: (%f, %f)\n", polygon2[0].x, polygon2[0].y);
@@ -170,12 +173,32 @@ int main(void)
 
         glBindTextureUnit(0, texture1);
         glBindTextureUnit(1, texture2);
-        //glBindVertexArray(vao);
         uint32_t tex = glGetUniformLocation(shaderProgram, "textures");
         int samplers[2] = { 0, 1 };
         glUniform1iv(tex, 2, samplers);
-       
+        
+        calculate_view_projection_matrix(&cam);
+        projection = glGetUniformLocation(shaderProgram, "projection");
+        glUniformMatrix4fv(projection, 1, GL_FALSE, (float*)cam.view_projection_matrix);
+        //add_quad(&renderer, q1);
+        //add_quad(&renderer, q2);
+        //add_quad(&renderer, q3);
+
+        int row, col;
+        float offset = 60;
+        float size = 80;
+        for (col = 0; col < 10; col++) {
+            for (row = 0; row < 10; row++) {
+                quad q;
+                init_quad(&q, (vec2) { size, size }, (vec2) { (col * size) + offset, (row * size) + 60.0 }, col % 2);
+                add_quad(&renderer, q);
+            }
+        }
+
+
         draw_batch(&renderer);
+        flush_renderer(&renderer);
+        printf("number of draw calls this frame: %d\n", renderer.num_draw_calls);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

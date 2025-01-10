@@ -36,6 +36,9 @@
     <ClCompile Include="src\batch_renderer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\camera.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="dependencies\GLEW\doc\advanced.html" />
@@ -94,6 +97,12 @@
     <ClInclude Include="src\include\batch_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\bruno.png">
@@ -108,5 +117,10 @@
     <Image Include="resources\textures\home.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="openglC.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

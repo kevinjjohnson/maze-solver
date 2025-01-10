@@ -24,9 +24,11 @@ typedef struct {
 
 	vertex* buffer_start;
 	vertex* buffer_current;
+	int num_draw_calls;
 }batch_renderer;
 
 void init_batch_renderer(batch_renderer* renderer);
 void free_batch_renderer(batch_renderer* renderer);
 void draw_batch(batch_renderer* renderer);
 void add_quad(batch_renderer* renderer, quad q);
+void flush_renderer(batch_renderer* renderer);
