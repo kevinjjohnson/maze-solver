@@ -10,6 +10,7 @@
 #include "include/quad.h"
 #include "include/camera.h"
 #include "include/disjoint_set.h"
+#include "include/maze_generator.h"
 
 typedef struct {
     int size[2];
@@ -64,8 +65,22 @@ int main(void) {
     join_set(&set, 5, 6);
     join_set(&set, 6, 3);
     print_disjoint_set(&set);
-
+    printf("\n\n");
     free_disjoint_set(&set);
+
+    maze m;
+    init_maze(&m, 5);
+    print_maze(&m);
+    printf("\n\n");
+    for (int it = 0; it < m.walls_size; it++) {
+        printf("%d ", m.walls[it]);
+    }
+    printf("\n");
+    random_sort_walls(&m);
+    for (int it = 0; it < m.walls_size; it++) {
+        printf("%d ", m.walls[it]);
+    }
+    printf("\n");
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -137,7 +152,7 @@ int main(void) {
             }
         }
         */
-        
+        /*
         for (col = 0; col < 10; col++) {
             for (row = 0; row < 10; row++) {
                 quad q;
@@ -145,6 +160,7 @@ int main(void) {
                 add_quad(&renderer, q);
             }
         }
+        */
         /*
         for (int i = 0; i < 10; i++) {
             quad q;
@@ -152,6 +168,7 @@ int main(void) {
             add_quad(&renderer, q);
         }
         */
+        render_maze(&renderer, &m, 80);
         draw_batch(&renderer);
         flush_renderer(&renderer);
         //printf("number of draw calls this frame: %d\n", renderer.num_draw_calls);
