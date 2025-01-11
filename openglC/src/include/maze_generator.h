@@ -5,7 +5,7 @@
 typedef struct {
 	int size;
 	int* cells;
-	disjoint_set* open_cells;
+	disjoint_set open_cells;
 	int* walls;
 	int walls_size;
 }maze;

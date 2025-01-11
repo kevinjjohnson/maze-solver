@@ -21,12 +21,45 @@ void init_maze(maze* maze, int size) {
 				maze->cells[i] = 1;
 		}
 	}
+	init_disjoint_set(&(maze->open_cells), size * size);
 }
 
 void free_maze(maze* maze) {
 }
 
 void generate_maze(maze* maze) {
+	for (int it = 0; it < maze->walls_size; it++) {
+		printf("%d ", maze->walls[it]);
+	}
+	printf("\n");
+	random_sort_walls(maze);
+	for (int it = 0; it < maze->walls_size; it++) {
+		printf("%d ", maze->walls[it]);
+	}
+	printf("\n");
+	for (int i = 0; i < maze->walls_size; i++) {
+		int wall = maze->walls[i];
+		int row = wall % maze->size;
+		int col = wall / maze->size;
+		int x, y;
+		x = -1;
+		y = -1;
+		
+		if (row >= 1 && row <= maze->size - 2 && maze->cells[wall - 1] == 0 && maze->cells[wall + 1] == 0) {
+			x = find(&(maze->open_cells), wall - 1);
+			y = find(&(maze->open_cells), wall + 1);
+		}
+		else if (col >= 1 && col <= maze->size - 2 && maze->cells[wall - maze->size] == 0 && maze->cells[wall + maze->size] == 0) {
+			x = find(&(maze->open_cells), wall - maze->size);
+			y = find(&(maze->open_cells), wall + maze->size);
+		}
+		if (x != -1 && y != -1) {
+			if (x != y) {
+				maze->cells[wall] = 0;
+				join_set(&(maze->open_cells), x, y);
+			}
+		}
+	}
 }
 
 void render_maze(batch_renderer* renderer, maze* maze, float cell_size) {

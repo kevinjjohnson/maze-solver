@@ -69,17 +69,20 @@ int main(void) {
     free_disjoint_set(&set);
 
     maze m;
-    init_maze(&m, 5);
+    init_maze(&m, 41);
     print_maze(&m);
     printf("\n\n");
     for (int it = 0; it < m.walls_size; it++) {
         printf("%d ", m.walls[it]);
     }
     printf("\n");
-    random_sort_walls(&m);
-    for (int it = 0; it < m.walls_size; it++) {
-        printf("%d ", m.walls[it]);
-    }
+    //random_sort_walls(&m);
+    //for (int it = 0; it < m.walls_size; it++) {
+        //printf("%d ", m.walls[it]);
+    //}
+    generate_maze(&m);
+    print_maze(&m);
+    print_disjoint_set(&(m.open_cells));
     printf("\n");
 
     /* Loop until the user closes the window */
