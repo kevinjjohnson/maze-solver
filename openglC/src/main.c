@@ -10,13 +10,10 @@
 #include "include/quad.h"
 #include "include/camera.h"
 
-
 typedef struct {
     int size[2];
     char* name;
 } Settings;
-
-
 
 int main(void) {
     GLFWwindow* window; 
@@ -31,7 +28,7 @@ int main(void) {
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
+    //glfwSwapInterval(0);
 
     GLenum err = glewInit();
     if (err != GLEW_OK) {
@@ -39,39 +36,20 @@ int main(void) {
     }
     glClearColor(0.16f, 0.16f, 0.16f, 1.0f);
 
-
-    uint32_t vertexShader;
-    vertexShader = create_shader("resources/shaders/firstVertex.shader", GL_VERTEX_SHADER);
-    
-    uint32_t fragmentShader;
-    fragmentShader = create_shader("resources/shaders/firstFragment.shader", GL_FRAGMENT_SHADER);
-     
-    uint32_t shaderProgram;
-    shaderProgram = create_shader_program(vertexShader, fragmentShader);
-
-
-    //mat4 ortho;
-    //glm_ortho(0.0f, 1600.0f, 0.0f, 900.0f, -1.0f, 1.0f, ortho);
-
     camera cam;
     init_camera(&cam);
 
-
-
-    uint32_t projection = glGetUniformLocation(shaderProgram, "projection");
-    glUniformMatrix4fv(projection, 1, GL_FALSE, (float*)cam.view_projection_matrix);
+    batch_renderer renderer;
+    init_batch_renderer(&renderer);
 
     uint32_t texture1, texture2;
     texture1 = load_texture("resources/textures/home.png", GL_TEXTURE_2D, 0);
 
     texture2 = load_texture("resources/textures/bruno.png", GL_TEXTURE_2D, 1);
-    uint32_t tex = glGetUniformLocation(shaderProgram, "textures");
+    uint32_t tex = glGetUniformLocation(renderer.shader_program, "textures");
     int samplers[2] = { 0, 1 };
     glUniform1iv(tex, 2, samplers);
 
-
-    batch_renderer renderer;
-    init_batch_renderer(&renderer);
 
     quad q1;
     init_quad(&q1, (vec2) { 100, 100 }, (vec2) { 100, 100 }, 0);
@@ -91,17 +69,25 @@ int main(void) {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
         
+        
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
             move_camera(&cam, (vec2) {0.0f, 2.0f});
+            calculate_view_projection_matrix(&cam);
+
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
             move_camera(&cam, (vec2) { 0.0f, -2.0f });
+            calculate_view_projection_matrix(&cam);
+
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
             move_camera(&cam, (vec2) { -2.0f, 0.0f });
+            calculate_view_projection_matrix(&cam);
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
             move_camera(&cam, (vec2) { 2.0f, 0.0f });
+            calculate_view_projection_matrix(&cam);
+
         }
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
             printf("should be zoomin");
@@ -109,7 +95,7 @@ int main(void) {
         }
         
 
-        glUseProgram(shaderProgram);
+        glUseProgram(renderer.shader_program);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
         glActiveTexture(GL_TEXTURE1);
@@ -117,16 +103,12 @@ int main(void) {
 
         glBindTextureUnit(0, texture1);
         glBindTextureUnit(1, texture2);
-        uint32_t tex = glGetUniformLocation(shaderProgram, "textures");
+        uint32_t tex = glGetUniformLocation(renderer.shader_program, "textures");
         int samplers[2] = { 0, 1 };
         glUniform1iv(tex, 2, samplers);
         
-        calculate_view_projection_matrix(&cam);
-        projection = glGetUniformLocation(shaderProgram, "projection");
+        uint32_t projection = glGetUniformLocation(renderer.shader_program, "projection");
         glUniformMatrix4fv(projection, 1, GL_FALSE, (float*)cam.view_projection_matrix);
-        //add_quad(&renderer, q1);
-        //add_quad(&renderer, q2);
-        //add_quad(&renderer, q3);
 
         int row, col;
         float offset = 60;
@@ -139,10 +121,9 @@ int main(void) {
             }
         }
 
-
         draw_batch(&renderer);
         flush_renderer(&renderer);
-        printf("number of draw calls this frame: %d\n", renderer.num_draw_calls);
+        //printf("number of draw calls this frame: %d\n", renderer.num_draw_calls);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -153,8 +134,4 @@ int main(void) {
 
     glfwTerminate();
     return 0;
-}
-
-void processInput(GLFWwindow* window) {
-    
 }
