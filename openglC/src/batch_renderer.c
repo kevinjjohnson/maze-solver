@@ -30,7 +30,6 @@ float testverts[] = {
 };
 
 void init_batch_renderer(batch_renderer* renderer) {
-	printf("test");
 	renderer->num_quads = 0;
 	renderer->num_draw_calls = 0;
 

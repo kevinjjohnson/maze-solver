@@ -9,6 +9,7 @@
 #include "include/batch_renderer.h"
 #include "include/quad.h"
 #include "include/camera.h"
+#include "include/disjoint_set.h"
 
 typedef struct {
     int size[2];
@@ -43,55 +44,68 @@ int main(void) {
     init_batch_renderer(&renderer);
 
     uint32_t texture1, texture2;
-    texture1 = load_texture("resources/textures/home.png", GL_TEXTURE_2D, 0);
+    texture1 = load_texture("resources/textures/test.png", GL_TEXTURE_2D, 0);
 
     texture2 = load_texture("resources/textures/bruno.png", GL_TEXTURE_2D, 1);
     uint32_t tex = glGetUniformLocation(renderer.shader_program, "textures");
     int samplers[2] = { 0, 1 };
     glUniform1iv(tex, 2, samplers);
 
+    float delta_time = 0.0f;
+    float last_frame = 0.0f;
+    float cam_speed = 200.0f;
 
-    quad q1;
-    init_quad(&q1, (vec2) { 100, 100 }, (vec2) { 100, 100 }, 0);
-    quad q2;
-    init_quad(&q2, (vec2) { 500, 500 }, (vec2) { 800, 450 }, 0);
-    quad q3;
-    init_quad(&q3, (vec2) { 200, 200 }, (vec2) {300, 400 }, 1);
+    disjoint_set set;
+    init_disjoint_set(&set, 10);
+    print_disjoint_set(&set);
+    printf("\n");
+    join_set(&set, 1, 2);
+    join_set(&set, 3, 2);
+    join_set(&set, 5, 6);
+    join_set(&set, 6, 3);
+    print_disjoint_set(&set);
 
-    add_quad(&renderer, q1);
-    add_quad(&renderer, q2);
-    add_quad(&renderer, q3);
+    free_disjoint_set(&set);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         renderer.num_draw_calls = 0;
+        float current_frame = glfwGetTime();
+        delta_time = current_frame - last_frame;
+        last_frame = current_frame;
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
         
         
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            move_camera(&cam, (vec2) {0.0f, 2.0f});
+            move_camera(&cam, (vec2) {0.0f, cam_speed * delta_time});
             calculate_view_projection_matrix(&cam);
 
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            move_camera(&cam, (vec2) { 0.0f, -2.0f });
+            move_camera(&cam, (vec2) { 0.0f, -cam_speed * delta_time});
             calculate_view_projection_matrix(&cam);
 
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            move_camera(&cam, (vec2) { -2.0f, 0.0f });
+            move_camera(&cam, (vec2) { -cam_speed * delta_time, 0.0f });
             calculate_view_projection_matrix(&cam);
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            move_camera(&cam, (vec2) { 2.0f, 0.0f });
+            move_camera(&cam, (vec2) { cam_speed* delta_time, 0.0f });
             calculate_view_projection_matrix(&cam);
 
         }
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
             printf("should be zoomin");
             zoom_camera(&cam, cam.zoom - .01);
+            calculate_view_projection_matrix(&cam);
+        }
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+            printf("should be zoomin");
+            zoom_camera(&cam, cam.zoom + .01);
+            calculate_view_projection_matrix(&cam);
         }
         
 
@@ -113,6 +127,8 @@ int main(void) {
         int row, col;
         float offset = 60;
         float size = 80;
+        float border_width = 10;
+        /*
         for (col = 0; col < 10; col++) {
             for (row = 0; row < 10; row++) {
                 quad q;
@@ -120,7 +136,22 @@ int main(void) {
                 add_quad(&renderer, q);
             }
         }
-
+        */
+        
+        for (col = 0; col < 10; col++) {
+            for (row = 0; row < 10; row++) {
+                quad q;
+                init_quad(&q, (vec2) { size, size }, (vec2) { (border_width * (col + 1)) + (col * size) + offset, (border_width * (row + 1)) + (row * size) + offset }, col % 2);
+                add_quad(&renderer, q);
+            }
+        }
+        /*
+        for (int i = 0; i < 10; i++) {
+            quad q;
+            init_quad(&q, (vec2) { size, size }, (vec2) { (border_width * (i + 1)) + (i * size) + offset, offset }, 0);
+            add_quad(&renderer, q);
+        }
+        */
         draw_batch(&renderer);
         flush_renderer(&renderer);
         //printf("number of draw calls this frame: %d\n", renderer.num_draw_calls);
