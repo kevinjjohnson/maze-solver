@@ -45,9 +45,9 @@ int main(void) {
     init_batch_renderer(&renderer);
 
     uint32_t texture1, texture2;
-    texture1 = load_texture("resources/textures/test.png", GL_TEXTURE_2D, 0);
+    texture1 = load_texture("resources/textures/white.png", GL_TEXTURE_2D, 0);
 
-    texture2 = load_texture("resources/textures/bruno.png", GL_TEXTURE_2D, 1);
+    texture2 = load_texture("resources/textures/black.png", GL_TEXTURE_2D, 1);
     uint32_t tex = glGetUniformLocation(renderer.shader_program, "textures");
     int samplers[2] = { 0, 1 };
     glUniform1iv(tex, 2, samplers);
@@ -69,7 +69,7 @@ int main(void) {
     free_disjoint_set(&set);
 
     maze m;
-    init_maze(&m, 41);
+    init_maze(&m, 71);
     print_maze(&m);
     printf("\n\n");
     for (int it = 0; it < m.walls_size; it++) {
@@ -171,7 +171,7 @@ int main(void) {
             add_quad(&renderer, q);
         }
         */
-        render_maze(&renderer, &m, 80);
+        render_maze(&renderer, &m, 10);
         draw_batch(&renderer);
         flush_renderer(&renderer);
         //printf("number of draw calls this frame: %d\n", renderer.num_draw_calls);

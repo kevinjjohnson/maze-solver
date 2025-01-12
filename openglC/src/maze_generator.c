@@ -1,4 +1,5 @@
 #include "include/maze_generator.h"
+#include <time.h>
 
 void init_maze(maze* maze, int size) {
 	maze->size = size;
@@ -60,6 +61,8 @@ void generate_maze(maze* maze) {
 			}
 		}
 	}
+	maze->cells[maze->size - 2] = 0;
+	maze->cells[maze->size * maze->size - maze->size + 1] = 0;
 }
 
 void render_maze(batch_renderer* renderer, maze* maze, float cell_size) {
@@ -81,6 +84,7 @@ void print_maze(maze* maze){
 }
 
 void random_sort_walls(maze* maze) {
+	srand(time(NULL));
 	int temp, random;
 	for (int i = 0; i < maze->walls_size; i++) {
 		random = (int) ((double)rand() / ((double)RAND_MAX + 1) * maze->walls_size);
