@@ -40,17 +40,17 @@ void generate_maze(maze* maze) {
 	printf("\n");
 	for (int i = 0; i < maze->walls_size; i++) {
 		int wall = maze->walls[i];
-		int row = wall % maze->size;
-		int col = wall / maze->size;
+		int col = wall % maze->size;
+		int row = wall / maze->size;
 		int x, y;
 		x = -1;
 		y = -1;
 		
-		if (row >= 1 && row <= maze->size - 2 && maze->cells[wall - 1] == 0 && maze->cells[wall + 1] == 0) {
+		if (col >= 1 && col <= maze->size - 2 && maze->cells[wall - 1] == 0 && maze->cells[wall + 1] == 0) {
 			x = find(&(maze->open_cells), wall - 1);
 			y = find(&(maze->open_cells), wall + 1);
 		}
-		else if (col >= 1 && col <= maze->size - 2 && maze->cells[wall - maze->size] == 0 && maze->cells[wall + maze->size] == 0) {
+		else if (row >= 1 && row <= maze->size - 2 && maze->cells[wall - maze->size] == 0 && maze->cells[wall + maze->size] == 0) {
 			x = find(&(maze->open_cells), wall - maze->size);
 			y = find(&(maze->open_cells), wall + maze->size);
 		}
@@ -69,8 +69,8 @@ void render_maze(batch_renderer* renderer, maze* maze, float cell_size) {
 	int offset = 60;
 	for (int i = 0; i < maze->size * maze->size; i++) {
 		quad q;
-		int row = i % maze->size;
-		int col = i / maze->size;
+		int row = i / maze->size;
+		int col = i % maze->size;
 		init_quad(&q, (vec2) { cell_size, cell_size }, (vec2) {col * cell_size + offset, row * cell_size + offset}, maze->cells[i]);
 		add_quad(renderer, q);
 	}

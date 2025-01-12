@@ -11,6 +11,7 @@
 #include "include/camera.h"
 #include "include/disjoint_set.h"
 #include "include/maze_generator.h"
+#include "include/priority_queue.h"
 
 typedef struct {
     int size[2];
@@ -56,18 +57,21 @@ int main(void) {
     float last_frame = 0.0f;
     float cam_speed = 200.0f;
 
-    disjoint_set set;
-    init_disjoint_set(&set, 10);
-    print_disjoint_set(&set);
+    priority_queue queue;
+    init_priority_queue(&queue, 50);
+    queue_element e;
+    for (int i = 0; i < 8; i++) {
+        e.element = i;
+        e.priority = i;
+        queue_insert(&queue, e);
+    }
+    print_queue(queue);
     printf("\n");
-    join_set(&set, 1, 2);
-    join_set(&set, 3, 2);
-    join_set(&set, 5, 6);
-    join_set(&set, 6, 3);
-    print_disjoint_set(&set);
-    printf("\n\n");
-    free_disjoint_set(&set);
+    queue_extract_min(&queue);
+    print_queue(queue);
 
+
+    printf("\n");
     maze m;
     init_maze(&m, 71);
     print_maze(&m);
