@@ -39,13 +39,10 @@
     <ClCompile Include="src\disjoint_set.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\maze_generator.c">
+    <ClCompile Include="src\maze.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\priority_queue.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\maze_solver.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -112,13 +109,10 @@
     <ClInclude Include="src\include\disjoint_set.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\maze_generator.h">
+    <ClInclude Include="src\include\maze.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\include\priority_queue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\include\maze_solver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

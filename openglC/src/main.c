@@ -9,10 +9,7 @@
 #include "include/batch_renderer.h"
 #include "include/quad.h"
 #include "include/camera.h"
-#include "include/disjoint_set.h"
-#include "include/maze_generator.h"
-#include "include/priority_queue.h"
-#include "include/maze_solver.h"
+#include "include/maze.h"
 
 typedef struct {
     int size[2];
@@ -22,7 +19,7 @@ typedef struct {
 int main(void) {
     GLFWwindow* window; 
     Settings s;
-    s.name = "i hate bug\0";
+    s.name = "batch renderer demo\0";
     s.size[0] = 1600;
     s.size[1] = 900;
     
@@ -64,13 +61,9 @@ int main(void) {
 
     printf("\n");
     maze m;
-    init_maze(&m, 81);
+    init_maze(&m, 7);
     print_maze(&m);
     printf("\n\n");
-    for (int it = 0; it < m.walls_size; it++) {
-        printf("%d ", m.walls[it]);
-    }
-    printf("\n");
     //random_sort_walls(&m);
     //for (int it = 0; it < m.walls_size; it++) {
         //printf("%d ", m.walls[it]);

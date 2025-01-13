@@ -23,8 +23,7 @@
     <ClCompile Include="src\camera.c" />
     <ClCompile Include="src\disjoint_set.c" />
     <ClCompile Include="src\main.c" />
-    <ClCompile Include="src\maze_generator.c" />
-    <ClCompile Include="src\maze_solver.c" />
+    <ClCompile Include="src\maze.c" />
     <ClCompile Include="src\priority_queue.c" />
     <ClCompile Include="src\quad.c" />
     <ClCompile Include="src\shader.c" />
@@ -62,8 +61,7 @@
     <ClInclude Include="src\include\batch_renderer.h" />
     <ClInclude Include="src\include\camera.h" />
     <ClInclude Include="src\include\disjoint_set.h" />
-    <ClInclude Include="src\include\maze_generator.h" />
-    <ClInclude Include="src\include\maze_solver.h" />
+    <ClInclude Include="src\include\maze.h" />
     <ClInclude Include="src\include\priority_queue.h" />
     <ClInclude Include="src\include\quad.h" />
     <ClInclude Include="src\include\shader.h" />
