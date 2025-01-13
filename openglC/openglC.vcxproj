@@ -21,8 +21,10 @@
   <ItemGroup>
     <ClCompile Include="src\batch_renderer.c" />
     <ClCompile Include="src\camera.c" />
-    <ClCompile Include="src\collision.c" />
+    <ClCompile Include="src\disjoint_set.c" />
     <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\maze.c" />
+    <ClCompile Include="src\priority_queue.c" />
     <ClCompile Include="src\quad.c" />
     <ClCompile Include="src\shader.c" />
     <ClCompile Include="src\texture.c" />
@@ -58,7 +60,9 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\include\batch_renderer.h" />
     <ClInclude Include="src\include\camera.h" />
-    <ClInclude Include="src\include\collison.h" />
+    <ClInclude Include="src\include\disjoint_set.h" />
+    <ClInclude Include="src\include\maze.h" />
+    <ClInclude Include="src\include\priority_queue.h" />
     <ClInclude Include="src\include\quad.h" />
     <ClInclude Include="src\include\shader.h" />
     <ClInclude Include="src\include\texture.h" />
@@ -66,7 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\bruno.png" />
-    <Image Include="resources\textures\concrete.png" />
+    <Image Include="resources\textures\home.jpg" />
     <Image Include="resources\textures\home.png" />
     <Image Include="resources\textures\test.png" />
   </ItemGroup>

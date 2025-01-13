@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_QUAD_COUNT  1000
+#include "include/shader.h"
+
+#define MAX_QUAD_COUNT  10000
 #define MAX_VERTEX_COUNT MAX_QUAD_COUNT * 4
 #define MAX_INDEX_COUNT MAX_QUAD_COUNT * 6
 
@@ -28,7 +30,6 @@ float testverts[] = {
 };
 
 void init_batch_renderer(batch_renderer* renderer) {
-	printf("test");
 	renderer->num_quads = 0;
 	renderer->num_draw_calls = 0;
 
@@ -70,6 +71,14 @@ void init_batch_renderer(batch_renderer* renderer) {
 
 	renderer->buffer_start = malloc(MAX_VERTEX_COUNT * sizeof(vertex));
 	renderer->buffer_current = renderer->buffer_start;
+
+	uint32_t vertex_shader;
+	vertex_shader = create_shader("resources/shaders/firstVertex.shader", GL_VERTEX_SHADER);
+
+	uint32_t fragment_shader;
+	fragment_shader = create_shader("resources/shaders/firstFragment.shader", GL_FRAGMENT_SHADER);
+
+	renderer->shader_program = create_shader_program(vertex_shader, fragment_shader);
 
 }
 

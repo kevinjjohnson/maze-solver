@@ -17,14 +17,16 @@ typedef struct {
 
 typedef struct {
 	uint32_t num_quads;
-
+	int num_draw_calls;
 	uint32_t va;
 	uint32_t vb;
 	uint32_t ib;
+	uint32_t shader_program;
 
 	vertex* buffer_start;
 	vertex* buffer_current;
-	int num_draw_calls;
+	
+
 }batch_renderer;
 
 void init_batch_renderer(batch_renderer* renderer);

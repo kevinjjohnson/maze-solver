@@ -1,6 +1,15 @@
 #pragma once
 #include "cglm/cglm.h"
-#include "collison.h"
+
+typedef struct {
+	float x;
+	float y;
+}point;
+
+typedef struct {
+	float x;
+	float y;
+}edge;
 
 typedef struct {
 	vec2 size;
