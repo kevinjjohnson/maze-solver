@@ -12,6 +12,7 @@
 #include "include/disjoint_set.h"
 #include "include/maze_generator.h"
 #include "include/priority_queue.h"
+#include "include/maze_solver.h"
 
 typedef struct {
     int size[2];
@@ -45,35 +46,25 @@ int main(void) {
     batch_renderer renderer;
     init_batch_renderer(&renderer);
 
-    uint32_t texture1, texture2;
+    uint32_t texture1, texture2, texture3;
     texture1 = load_texture("resources/textures/white.png", GL_TEXTURE_2D, 0);
 
     texture2 = load_texture("resources/textures/black.png", GL_TEXTURE_2D, 1);
+    
+    texture3 = load_texture("resources/textures/green.png", GL_TEXTURE_2D, 2);
+
     uint32_t tex = glGetUniformLocation(renderer.shader_program, "textures");
-    int samplers[2] = { 0, 1 };
-    glUniform1iv(tex, 2, samplers);
+    int samplers[3] = { 0, 1, 2 };
+    glUniform1iv(tex, 3, samplers);
 
     float delta_time = 0.0f;
     float last_frame = 0.0f;
     float cam_speed = 200.0f;
 
-    priority_queue queue;
-    init_priority_queue(&queue, 50);
-    queue_element e;
-    for (int i = 0; i < 8; i++) {
-        e.element = i;
-        e.priority = i;
-        queue_insert(&queue, e);
-    }
-    print_queue(queue);
-    printf("\n");
-    queue_extract_min(&queue);
-    print_queue(queue);
-
 
     printf("\n");
     maze m;
-    init_maze(&m, 71);
+    init_maze(&m, 81);
     print_maze(&m);
     printf("\n\n");
     for (int it = 0; it < m.walls_size; it++) {
@@ -86,8 +77,11 @@ int main(void) {
     //}
     generate_maze(&m);
     print_maze(&m);
-    print_disjoint_set(&(m.open_cells));
+    //print_disjoint_set(&(m.open_cells));
     printf("\n");
+
+    
+    bool solved = false;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -129,16 +123,23 @@ int main(void) {
             zoom_camera(&cam, cam.zoom + .01);
             calculate_view_projection_matrix(&cam);
         }
-        
-
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+            if (!solved) {
+                solve_maze(&m, m.size - 2, m.size * m.size - m.size + 1);
+                solved = true;
+            }
+        }
         glUseProgram(renderer.shader_program);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, texture3);
 
         glBindTextureUnit(0, texture1);
         glBindTextureUnit(1, texture2);
+        glBindTextureUnit(2, texture3);
         uint32_t tex = glGetUniformLocation(renderer.shader_program, "textures");
         int samplers[2] = { 0, 1 };
         glUniform1iv(tex, 2, samplers);
