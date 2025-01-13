@@ -5,7 +5,7 @@
 
 #include "include/shader.h"
 
-#define MAX_QUAD_COUNT  1000
+#define MAX_QUAD_COUNT  10000
 #define MAX_VERTEX_COUNT MAX_QUAD_COUNT * 4
 #define MAX_INDEX_COUNT MAX_QUAD_COUNT * 6
 

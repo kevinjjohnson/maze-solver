@@ -102,8 +102,6 @@ void solve_maze(maze* maze, int start, int end) {
 	for (int d = 0; d < size; d++) {
 		distance[d] = -1;
 	}
-
-
 	//first element of maze
 	queue_element e;
 	e.element = start;
@@ -113,7 +111,6 @@ void solve_maze(maze* maze, int start, int end) {
 	parent[start] = -1;
 
 	while (queue.size > 0) {
-		//print_queue(queue);
 		int current_cell = queue_extract_min(&queue);
 		if (current_cell == end) break;
 
@@ -162,12 +159,6 @@ void solve_maze(maze* maze, int start, int end) {
 		}
 
 	}
-
-	/*
-	for (int i = 0; i < size; i++) {
-		printf("cell %d, parent: %d\n", i, parent[i]);
-	}
-	*/
 	int index = end;
 	while (index != -1) {
 		maze->cells[index] = 2;

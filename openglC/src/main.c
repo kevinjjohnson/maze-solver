@@ -61,19 +61,9 @@ int main(void) {
 
     printf("\n");
     maze m;
-    init_maze(&m, 7);
-    print_maze(&m);
-    printf("\n\n");
-    //random_sort_walls(&m);
-    //for (int it = 0; it < m.walls_size; it++) {
-        //printf("%d ", m.walls[it]);
-    //}
+    init_maze(&m, 201);
     generate_maze(&m);
-    print_maze(&m);
-    //print_disjoint_set(&(m.open_cells));
-    printf("\n");
 
-    
     bool solved = false;
 
     /* Loop until the user closes the window */
@@ -140,39 +130,10 @@ int main(void) {
         uint32_t projection = glGetUniformLocation(renderer.shader_program, "projection");
         glUniformMatrix4fv(projection, 1, GL_FALSE, (float*)cam.view_projection_matrix);
 
-        int row, col;
-        float offset = 60;
-        float size = 80;
-        float border_width = 10;
-        /*
-        for (col = 0; col < 10; col++) {
-            for (row = 0; row < 10; row++) {
-                quad q;
-                init_quad(&q, (vec2) { size, size }, (vec2) { (col * size) + offset, (row * size) + 60.0 }, col % 2);
-                add_quad(&renderer, q);
-            }
-        }
-        */
-        /*
-        for (col = 0; col < 10; col++) {
-            for (row = 0; row < 10; row++) {
-                quad q;
-                init_quad(&q, (vec2) { size, size }, (vec2) { (border_width * (col + 1)) + (col * size) + offset, (border_width * (row + 1)) + (row * size) + offset }, col % 2);
-                add_quad(&renderer, q);
-            }
-        }
-        */
-        /*
-        for (int i = 0; i < 10; i++) {
-            quad q;
-            init_quad(&q, (vec2) { size, size }, (vec2) { (border_width * (i + 1)) + (i * size) + offset, offset }, 0);
-            add_quad(&renderer, q);
-        }
-        */
         render_maze(&renderer, &m, 10);
         draw_batch(&renderer);
         flush_renderer(&renderer);
-        //printf("number of draw calls this frame: %d\n", renderer.num_draw_calls);
+        printf("number of draw calls this frame: %d\n", renderer.num_draw_calls);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
