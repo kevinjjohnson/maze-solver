@@ -22,6 +22,12 @@ int main(void) {
     s.name = "batch renderer demo\0";
     s.size[0] = 1600;
     s.size[1] = 900;
+
+
+    printf("Please enter the desired maze size(size should be >= 5 and even numbers will be rounded up to nearest odd number)\n");
+    int maze_size;
+    scanf_s("%d", &maze_size);
+
     
     if (!glfwInit())
         return -1;
@@ -58,14 +64,15 @@ int main(void) {
     float last_frame = 0.0f;
     float cam_speed = 200.0f;
 
+    
 
     printf("\n");
     maze m;
-    init_maze(&m, 201);
+    init_maze(&m, maze_size);
     generate_maze(&m);
 
     bool solved = false;
-
+    bool printed = false;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -97,12 +104,10 @@ int main(void) {
 
         }
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-            printf("should be zoomin");
             zoom_camera(&cam, cam.zoom - .01);
             calculate_view_projection_matrix(&cam);
         }
         if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-            printf("should be zoomin");
             zoom_camera(&cam, cam.zoom + .01);
             calculate_view_projection_matrix(&cam);
         }
@@ -133,7 +138,10 @@ int main(void) {
         render_maze(&renderer, &m, 10);
         draw_batch(&renderer);
         flush_renderer(&renderer);
-        printf("number of draw calls this frame: %d\n", renderer.num_draw_calls);
+        if (!printed) {
+            printf("number of draw calls this frame: %d\n", renderer.num_draw_calls);
+            printed = true;
+        }
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

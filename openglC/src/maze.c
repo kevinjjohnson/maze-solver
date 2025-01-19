@@ -3,12 +3,18 @@
 #include "include/priority_queue.h"
 
 void init_maze(maze* maze, int size) {
-	maze->size = size;
-	maze->cells = malloc(size * size * sizeof(int));
+	int final_size = size;
+	if (final_size <= 5)
+		final_size = 5;
+	else if (final_size % 2 == 0)
+		final_size++;
+	
+	maze->size = final_size;
+	maze->cells = malloc(final_size * final_size * sizeof(int));
 	int curr_wall = 0;
-	for (int i = 0; i < size * size; i++) {
-		int row = (i % size);
-		int col = i / size;
+	for (int i = 0; i < final_size * final_size; i++) {
+		int row = (i % final_size);
+		int col = i / final_size;
 		if (row % 2 == 1 && col % 2 == 1)
 			maze->cells[i] = 0;
 		else
